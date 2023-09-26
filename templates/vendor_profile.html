@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <nav>
+            <ul>
+                <li><a href="{%  url 'add_product' %}">add-Item</a> </li>
+                <li>  <a href="{% url 'logout' %}">Logout</a> </li>
+                
+            </ul>
+             
+        </nav>
+        <h2>Welcome to your profile,{{user.username}}</h2>
+  <h3>Your Products:</h3>
+  <ul>
+    {% for product in products %}
+      <ui>
+        <li>  <strong>product:</strong> {{ product.name }}<br></li> 
+        <li>  <img src="{{ product.image.url }}" alt="{{ product.name }}" width="100"><br></li>
+        <li> <strong>Category:</strong> {{ product.category }}<br></li>
+        <li> <strong>Price:</strong> {{ product.price }}<br></li>
+        <li> <strong>Quantity:</strong> {{ product.quantity }}<br></li>
+      </ul>
+      <hr>
+    {% empty %}
+      <p>You haven't added any products yet.</p>
+    {% endfor %}
+  </ul>
+    
+        <script src="" async defer></script>
+    </body>
+</html>
+
+
+
+
