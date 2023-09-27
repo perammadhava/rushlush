@@ -24,14 +24,23 @@ from django.conf.urls.static import static
 
 
 
+
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+     path('admin/', admin.site.urls),
+     
     path('',include('vendor.urls')),
+    path('index/',include('vendor.urls')),
+   # path('login_page/',include('vendor.urls')),
+    path('home/',include('vendor.urls')),
     path('register/',include('vendor.urls')),
     path('login/',include('vendor.urls')),
     path('logout/',include('vendor.urls')),
     path('vendor_profile/',include('vendor.urls')),
-    path('add_product/', include('vendor.urls')),
+    path('add_product/',include('vendor.urls')),
+    path('Customerregister/',include('vendor.urls')),
+    path('Customerlogin/',include('vendor.urls')),
+   
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

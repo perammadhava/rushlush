@@ -1,31 +1,50 @@
+from imaplib import _Authenticator
+from multiprocessing import AuthenticationError
+from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from . models import Product 
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
-from .forms import ProductForm
+from .forms import ProductForm,CustomerRegistrationForm,CustomerLoginForm
 
 # Create your views here.
 
+def website(request):
+    return render(request,'website.html')
+
 def home(request):
     return render(request,'home.html')
+
+def index(request):
+    return render(request,'index.html')
+
+# def login_page(request):
+#     return render(request,'login_page.html')
     
 
 
+from django.contrib import auth
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
 def login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
 
-    if request.method != 'POST':
-        return render(request,'login.html')
-    username = request.POST['username']
-    password = request.POST['password']
+        user = auth.authenticate(request, username=username, password=password)
 
-    user = auth.authenticate(username=username,password=password)
+        if user is not None:
+            auth.login(request, user)
+            return redirect('vendor_profile')
+        else:
+            messages.info(request, 'Invalid credentials')
+            return redirect('login')
+    
+    return render(request, 'login.html')
 
-    if user is not None:
-        auth.login(request, user)
-        return redirect('vendor_profile')
-    else:
-        messages.info(request,'invalid credentials')
-        return redirect('login')    
+
+      
 
 def register(request):
 
@@ -91,6 +110,59 @@ def vendor_profile(request):
     products = Product.objects.filter(user=request.user)
     
     return render(request, 'vendor_profile.html', {'products': products})
+
+
+def Customer_register_view(request):
+    if request.method == 'POST':
+        form = CustomerRegistrationForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            pass1 = form.cleaned_data['password']
+            pass2 = form.cleaned_data['confirm_password']
+            if pass1 != pass2:
+                return HttpResponse("Your password and confirm password are not the same!!")
+            else:
+                form.save()  # Save the form data to the Vendor model
+                return redirect('Customerlogin')
+    else:
+        form = CustomerRegistrationForm()
+
+   
+
+    return render(request, 'Customerregister.html', {'form': form})
+
+
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+
+def Customer_login_view(request):
+    if request.method == 'POST':
+        form = CustomerLoginForm(request.POST)
+        if form.is_valid():
+            # Get the username and password from the form
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            
+            # Authenticate the user
+            Customer = authenticate(request, username=username, password=password)
+            
+            if Customer is not None:
+                # Log in the user
+                login(request, Customer)
+                return redirect('/')  # Redirect to a valid URL, e.g., 'home'
+            else:
+                messages.info(request,'invalid credentials')
+        else:
+            form = CustomerLoginForm()
+    else:
+        form = CustomerLoginForm()
+
+    return render(request, 'Customerlogin.html', {'form': form})
+
+   
+   
+   
 
 
 

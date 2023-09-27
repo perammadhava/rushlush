@@ -7,19 +7,15 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>RushLush</title>
+        <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="">
     </head>
     <body>
-        {% if user.is_authenticated %}
-        <li>hello, {{user.first_name}}</li>
-        <li><a href = "{% url 'logout' %}">logout</a></li>
-        {% else %}
-        <li><a href ="{% url 'register' %}" >register</a></li>
-        <li><a href = "{% url 'login' %}">login</a></li>
-        {% endif %}
+        <li>  <a href="{% url 'login' %}">login as vendor</a> </li>
+        <li>  <a href="{% url 'Customerlogin' %}">login as Customer</a> </li>
+        
         <script src="" async defer></script>
     </body>
 </html>
